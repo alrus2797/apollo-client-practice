@@ -1,4 +1,4 @@
-import { Component, ReactElement } from "react";
+import { ReactElement } from "react";
 
 type NestedKeyOf<ObjectType extends object> = {
   [Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
@@ -15,8 +15,6 @@ type Subset<K> = {
     ? Subset<K[attr]> | null | undefined
     : K[attr];
 };
-
-type Arrayable<T> = Array<T> | T;
 
 export interface Column<T extends object> {
   value: NestedKeyOf<T>;
