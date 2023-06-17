@@ -1,15 +1,14 @@
+import { Outlet } from "react-router-dom";
 import { NavBar } from "./navbar/navbar";
-import { Posts } from "./posts/posts";
 
 function App() {
   return (
     <>
       <NavBar />
       <main>
-        <Posts />
+        <Outlet />
       </main>
     </>
   );
 }
-
 export default App;
