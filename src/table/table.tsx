@@ -41,6 +41,8 @@ export const Table = <T extends object>({
   columns,
   extraColumns,
 }: TableProps<T>) => {
+  const defaultColumnWidth =
+    100 / (columns.length + (extraColumns?.length ?? 0));
   return (
     <table style={{ width: "100%", display: "table" }}>
       <thead>
@@ -49,14 +51,17 @@ export const Table = <T extends object>({
             <th
               key={value.toString()}
               style={{
-                width: `${width ?? 100 / columns.length}%`,
+                width: `${width ?? defaultColumnWidth}%`,
                 textAlign: align ?? "left",
               }}
             >
               {name}
             </th>
           ))}
-          {extraColumns && extraColumns.map((_) => <th></th>)}
+          {extraColumns &&
+            extraColumns.map((_) => (
+              <th style={{ width: defaultColumnWidth }}></th>
+            ))}
         </tr>
       </thead>
       <tbody>
