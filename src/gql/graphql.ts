@@ -35,9 +35,9 @@ export type Comment = {
   postId: Scalars['ID']['output'];
 };
 
-export type CommentFeed = {
-  __typename?: 'CommentFeed';
-  nextOffset?: Maybe<Scalars['Int']['output']>;
+export type CommentsFeed = {
+  __typename?: 'CommentsFeed';
+  nextPage?: Maybe<Scalars['Int']['output']>;
   results: Array<Comment>;
 };
 
@@ -46,6 +46,11 @@ export type Company = {
   bs?: Maybe<Scalars['String']['output']>;
   catchPhrase?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+};
+
+export type FeedInputs = {
+  _limit?: InputMaybe<Scalars['Int']['input']>;
+  _page?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Geo = {
@@ -57,18 +62,30 @@ export type Geo = {
 export type Post = {
   __typename?: 'Post';
   body: Scalars['String']['output'];
-  comments: Array<Maybe<Comment>>;
+  comments: CommentsFeed;
   id: Scalars['ID']['output'];
   title: Scalars['String']['output'];
   user: User;
   userId: Scalars['ID']['output'];
 };
 
+
+export type PostCommentsArgs = {
+  feedInputs?: InputMaybe<FeedInputs>;
+};
+
+export type PostsFeed = {
+  __typename?: 'PostsFeed';
+  nextPage?: Maybe<Scalars['Int']['output']>;
+  results: Array<Post>;
+};
+
 export type Query = {
   __typename?: 'Query';
   comment?: Maybe<Comment>;
-  comments: CommentFeed;
-  posts: Array<Post>;
+  comments: CommentsFeed;
+  post?: Maybe<Post>;
+  posts: PostsFeed;
 };
 
 
@@ -78,12 +95,21 @@ export type QueryCommentArgs = {
 
 
 export type QueryCommentsArgs = {
-  _limit?: InputMaybe<Scalars['Int']['input']>;
-  _page?: InputMaybe<Scalars['Int']['input']>;
   body?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  input?: InputMaybe<FeedInputs>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryPostArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryPostsArgs = {
+  input?: InputMaybe<FeedInputs>;
 };
 
 export type User = {
@@ -102,7 +128,7 @@ export type User = {
 export type GetAllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, title: string, userId: string, user: { __typename?: 'User', id: string, name: string } }> };
+export type GetAllPostsQuery = { __typename?: 'Query', posts: { __typename?: 'PostsFeed', nextPage?: number | null, results: Array<{ __typename?: 'Post', id: string, title: string, user: { __typename?: 'User', name: string } }> } };
 
 
-export const GetAllPostsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAllPosts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllPostsQuery, GetAllPostsQueryVariables>;
+export const GetAllPostsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAllPosts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nextPage"}},{"kind":"Field","name":{"kind":"Name","value":"results"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAllPostsQuery, GetAllPostsQueryVariables>;

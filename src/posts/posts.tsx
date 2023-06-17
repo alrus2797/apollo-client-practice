@@ -6,12 +6,13 @@ import { Post } from "../gql/graphql";
 const allPosts = graphql(/* GraphQL */ `
   query getAllPosts {
     posts {
-      id
-      title
-      userId
-      user {
+      nextPage
+      results {
         id
-        name
+        title
+        user {
+          name
+        }
       }
     }
   }
@@ -34,13 +35,11 @@ export const Posts = () => {
     },
   ];
 
-  console.log(data);
-
   return (
     <section>
       <h4>Posts</h4>
       <Table
-        items={data?.posts ?? []}
+        items={data?.posts.results ?? []}
         columns={columns}
         extraColumns={[(item) => <a> Open {item.id}</a>]}
       />
