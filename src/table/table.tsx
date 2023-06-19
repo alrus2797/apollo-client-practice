@@ -1,10 +1,5 @@
 import { ReactElement } from "react";
-
-type NestedKeyOf<ObjectType extends object> = {
-  [Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
-    ? `${Key}` | `${Key}.${NestedKeyOf<ObjectType[Key]>}`
-    : `${Key}`;
-}[keyof ObjectType & (string | number)];
+import { NestedKeyOf } from "./nested-keyof.type";
 
 type Subset<K> = {
   [attr in keyof K]?: K[attr] extends object
@@ -26,11 +21,10 @@ export interface Column<T extends object> {
 interface TableProps<T extends object> {
   items: Subset<T>[];
   columns: Array<Column<T>>;
-  // extraColumns?: ReactElement<{ (item: T) => void }> | ReactElement<{ (item: T) => void }>[];
   extraColumns?: ((item: Subset<T>) => ReactElement)[];
 }
 
-const getItem = <T extends object>(obj: Subset<T>, key: NestedKeyOf<T>) => {
+const getItem = <T extends object>(obj: Subset<T>, key: string) => {
   return key
     .split(".")
     .reduce((prev, curr) => prev[curr as keyof typeof prev] ?? prev, obj);
@@ -49,7 +43,7 @@ export const Table = <T extends object>({
         <tr>
           {columns.map(({ value, name, width, align }) => (
             <th
-              key={value.toString()}
+              key={`${value}`}
               style={{
                 width: `${width ?? defaultColumnWidth}%`,
                 textAlign: align ?? "left",
@@ -73,7 +67,7 @@ export const Table = <T extends object>({
                 style={{
                   textAlign: column.align ?? "left",
                 }}
-              >{`${getItem(item, column.value as NestedKeyOf<Subset<T>>)}`}</td>
+              >{`${getItem(item, `${column.value}`)}`}</td>
             ))}
             {extraColumns &&
               extraColumns.map((extraColumn) => <td>{extraColumn(item)}</td>)}
